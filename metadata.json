@@ -1,0 +1,6 @@
+{
+  "name": "Apps Script & Supabase Web App",
+  "description": "Custom web application integrating Google Apps Script and Supabase.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

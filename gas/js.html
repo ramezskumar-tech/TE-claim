@@ -1,0 +1,135 @@
+<script>
+/**
+ * Frontend Application Controller for Google Apps Script
+ */
+var app = (function() {
+  var currentUser = {
+    userId: 'DIS_VEL_01',
+    name: 'District Project Office, SS Vellore',
+    role: 'DISTRICT',
+    schoolName: 'Chief Educational Office'
+  };
+
+  var activeTab = 'home';
+
+  function init() {
+    updateNavUser();
+    renderCurrentTab();
+  }
+
+  function updateNavUser() {
+    document.getElementById('userRoleBadge').textContent = currentUser.role;
+    document.getElementById('userNameLabel').textContent = currentUser.name;
+    var verTabBtn = document.getElementById('verificationTabBtn');
+    if (currentUser.role === 'SCHOOL') {
+      verTabBtn.style.display = 'none';
+    } else {
+      verTabBtn.style.display = 'inline-block';
+      verTabBtn.textContent = currentUser.role === 'BLOCK' ? 'School Verification' : 'Block Verification';
+    }
+  }
+
+  function switchTab(tabId) {
+    activeTab = tabId;
+    var tabs = document.querySelectorAll('.tab-btn');
+    tabs.forEach(function(t) { t.classList.remove('active'); });
+    var panels = document.querySelectorAll('.view-panel');
+    panels.forEach(function(p) { p.classList.remove('active'); });
+
+    document.querySelectorAll('.tab-btn').forEach(function(btn) {
+      if (btn.getAttribute('onclick') && btn.getAttribute('onclick').indexOf(tabId) !== -1) {
+        btn.classList.add('active');
+      }
+    });
+
+    var activePanel = document.getElementById(tabId + 'View');
+    if (activePanel) {
+      activePanel.classList.add('active');
+      renderCurrentTab();
+    }
+  }
+
+  function renderCurrentTab() {
+    if (activeTab === 'home') {
+      renderHome();
+    } else if (activeTab === 'verification') {
+      renderVerification();
+    } else if (activeTab === 'audit') {
+      renderAudit();
+    } else if (activeTab === 'archive') {
+      renderArchive();
+    }
+  }
+
+  function renderHome() {
+    var container = document.getElementById('homeView');
+    if (currentUser.role === 'SCHOOL') {
+      container.innerHTML = '<h3>School Claim Submission</h3><p>Manage monthly student transport and escort claims.</p>';
+    } else if (currentUser.role === 'BLOCK') {
+      container.innerHTML = '<h3>Block Resource Centre Dashboard</h3><p>Verify school claims under your block.</p>';
+    } else {
+      container.innerHTML = '<h3>District Project Office Dashboard</h3><p>Oversee all 7 educational blocks and sanction funds.</p>';
+    }
+  }
+
+  function renderVerification() {
+    var container = document.getElementById('verificationView');
+    container.innerHTML = '<h3>Claim Verification Console</h3><p>Inspect line-item student attendance and approve or return claims.</p>';
+  }
+
+  function renderAudit() {
+    var container = document.getElementById('auditView');
+    container.innerHTML = '<h3>Permanent Audit History</h3><p>Immutable record of all submissions, verifications, and approvals.</p>';
+  }
+
+  function renderArchive() {
+    var container = document.getElementById('archiveView');
+    container.innerHTML = '<h3>Past Claim Cycles Archive</h3><p>View previous closed months and historical sanction orders.</p>';
+  }
+
+  function showRoleSwitcher() {
+    var html = '<div style="display:flex;flex-direction:column;gap:12px;">' +
+      '<button class="btn btn-outline" onclick="app.setRole(\'DISTRICT\', \'District Educational Officer\', \'DIS_VEL_01\')">🏛️ Switch to District Office</button>' +
+      '<button class="btn btn-outline" onclick="app.setRole(\'BLOCK\', \'S. Shanmugam, BEO (Vellore Urban)\', \'BLK_USR_URBAN\', \'BLK_VELLORE_URBAN\', \'Vellore Urban\')">🏢 Switch to Block (Vellore Urban)</button>' +
+      '<button class="btn btn-outline" onclick="app.setRole(\'SCHOOL\', \'K. Rajendran, Headmaster\', \'SCH_33040100101\', \'BLK_VELLORE_URBAN\', \'Vellore Urban\', \'33040100101\', \'GHS Sathuvachari\')">🏫 Switch to School (GHS Sathuvachari)</button>' +
+      '</div>';
+    openModal('Switch Demonstration Role', html);
+  }
+
+  function setRole(role, name, id, blockId, blockName, udise, schoolName) {
+    currentUser = {
+      userId: id,
+      name: name,
+      role: role,
+      blockId: blockId,
+      blockName: blockName,
+      udiseCode: udise,
+      schoolName: schoolName
+    };
+    closeModal();
+    updateNavUser();
+    renderCurrentTab();
+  }
+
+  function openModal(title, bodyHtml, footerHtml) {
+    document.getElementById('modalTitle').textContent = title;
+    document.getElementById('modalBody').innerHTML = bodyHtml;
+    document.getElementById('modalFooter').innerHTML = footerHtml || '<button class="btn btn-outline" onclick="app.closeModal()">Close</button>';
+    document.getElementById('appModal').classList.remove('hidden');
+  }
+
+  function closeModal() {
+    document.getElementById('appModal').classList.add('hidden');
+  }
+
+  window.addEventListener('DOMContentLoaded', init);
+
+  return {
+    switchTab: switchTab,
+    showRoleSwitcher: showRoleSwitcher,
+    setRole: setRole,
+    closeModal: closeModal,
+    openModal: openModal
+  };
+})();
+</script>

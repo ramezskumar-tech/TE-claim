@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <meta charset="utf-8">
+    <title>Samagra Shiksha Vellore - Transport & Escort Claim</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Include CSS file -->
+    <?!= HtmlService.createHtmlOutputFromFile('css').getContent(); ?>
+  </head>
+  <body>
+    <!-- Top Bar Navigation Contract -->
+    <header class="top-nav">
+      <div class="nav-brand">
+        <span class="emblem">🏛️</span>
+        <div class="brand-text">
+          <h1>Samagra Shiksha · Vellore District</h1>
+          <p>School Education Department, Government of Tamil Nadu</p>
+        </div>
+      </div>
+
+      <div class="nav-cycle-pill">
+        <span class="cycle-label">Active Claim Month:</span>
+        <strong id="displayClaimMonth"><?= cycleInfo.claimMonthName ?></strong>
+        <span class="cycle-period">(Period: <?= cycleInfo.calculationPeriodString ?>)</span>
+      </div>
+
+      <div class="nav-user-actions">
+        <div class="user-badge" id="navUserInfo">
+          <span class="user-role-tag" id="userRoleBadge">DISTRICT</span>
+          <span class="user-name" id="userNameLabel">District Admin</span>
+        </div>
+        <button class="btn btn-outline btn-sm" onclick="app.showRoleSwitcher()">Switch Role</button>
+      </div>
+    </header>
+
+    <!-- Main Viewport Canvas -->
+    <main class="main-container">
+      <!-- Dynamic Glowing Notifications Area -->
+      <div id="notificationArea" class="notification-container"></div>
+
+      <!-- Navigation Tabs -->
+      <nav class="view-tabs" id="viewTabsNav">
+        <button class="tab-btn active" onclick="app.switchTab('home')">Home / Dashboard</button>
+        <button class="tab-btn" id="verificationTabBtn" onclick="app.switchTab('verification')">Claim Verification</button>
+        <button class="tab-btn" onclick="app.switchTab('audit')">Audit History</button>
+        <button class="tab-btn" onclick="app.switchTab('archive')">Past Archives</button>
+      </nav>
+
+      <!-- Content Views -->
+      <section id="homeView" class="view-panel active"></section>
+      <section id="verificationView" class="view-panel"></section>
+      <section id="auditView" class="view-panel"></section>
+      <section id="archiveView" class="view-panel"></section>
+    </main>
+
+    <!-- Generic Modal Overlay -->
+    <div id="appModal" class="modal-overlay hidden">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 id="modalTitle">Modal Title</h3>
+          <button class="modal-close" onclick="app.closeModal()">&times;</button>
+        </div>
+        <div id="modalBody" class="modal-body"></div>
+        <div id="modalFooter" class="modal-footer"></div>
+      </div>
+    </div>
+
+    <!-- Include JavaScript file -->
+    <?!= HtmlService.createHtmlOutputFromFile('js').getContent(); ?>
+  </body>
+</html>
